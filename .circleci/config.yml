@@ -38,6 +38,8 @@ workflows:
           push-image: true
           tag: "latest,v0.1.${CIRCLE_BUILD_NUM}"
           dockerfile: build/dockerfile.prod
+          context:
+          - AWS-ECR-DEMO
           path: .
           requires:
             - test
