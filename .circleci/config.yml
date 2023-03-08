@@ -1,8 +1,4 @@
-
-
-version: 2.1
-orbs:
-  # https://circleci.com/developer/orbs/orb/circleci/node
+# https://circleci.com/developer/orbs/orb/circleci/node
 version: 2.1
 jobs:             
   build:
