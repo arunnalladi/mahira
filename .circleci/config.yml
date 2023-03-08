@@ -3,41 +3,30 @@
 version: 2.1
 orbs:
   # https://circleci.com/developer/orbs/orb/circleci/node
-  node: circleci/node@5.1.0
-  # https://circleci.com/developer/orbs/orb/circleci/aws-ecr
-  aws-ecr: circleci/aws-ecr@8.2.1
-
-jobs:
-  test:
-    executor:
-      name: node/default
-      tag: 14.15.1   
+version: 2.1
+jobs:             
+  build:
+    docker:
+      - image: circleci/python:3.9.5
     steps:
-    - checkout
-    - node/install-packages:
-        pkg-manager: npm
-    - run:
-        command: npm test
-        name: Run Mocha tests   
-    - store_artifacts:
-        path: /tmp/test-results
-        destination: raw-test-output
-    - store_test_results:
-        path: /tmp/test-results   
-    
+      - checkout
+      - run:
+          name: Install black
+          command: |
+            pip install black:22.12.0 
+      - run:
+          name: Run black
+          command: |
+            black .
 
 workflows:
-  node-tests:
+  version: 2
+  master:
     jobs:
-      - test
-      #Envs: AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY, AWS_REGION, AWS_ECR_ACCOUNT_URL
-      - aws-ecr/build-and-push-image:
-          repo: mahira
-          region: us-east-1
-          push-image: true
-          tag: "latest,v0.1.${CIRCLE_BUILD_NUM}"
-          dockerfile: build/dockerfile.prod
-          path: .
-          requires:
-            - test
+      - build:
+           filters:
+             branches:
+               only:
+                  -master
+
 
