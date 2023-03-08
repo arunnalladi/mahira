@@ -13,7 +13,6 @@ jobs:
           name: Run black
           command: |
             black .
-
 workflows:
   version: 2
   master:
